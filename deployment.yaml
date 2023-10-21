@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sftp
+  namespace: sftp
+  labels:
+    app: sftp
+spec:
+  selector:
+    matchLabels:
+      app: sftp
+  replicas: 1
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: sftp
+    spec:
+      volumes:
+        - name: sftp-data
+          emptyDir:
+            sizeLimit: 50Mi
+        - name: sftp-config
+          emptyDir:
+            sizeLimit: 50Mi
+        - name: sftp-sshd-config
+          configMap:
+            name: sftp-sshd-config
+            items:
+              - key: sshd_config
+                path: sshd_config
+      containers:
+
+        - name: sftp
+          image: atmoz/sftp:latest
+          imagePullPolicy: Always
+          args: ["myUser::1010:110:incoming,outgoing"] #create users and dirs
+          ports:
+            - containerPort: 22
+          volumeMounts:
+            - mountPath: /home/
+              name: sftp-data
+              readOnly: false
+            - mountPath: /etc/ssh
+              name: sftp-config
+              readOnly: false
+            - mountPath: /etc/ssh/sshd_config
+              subPath: sshd_config
+              name: sftp-sshd-config
+              readOnly: false
+          securityContext:
+            capabilities:
+              add: ["SYS_ADMIN"]
+          resources: {}
+        - name: busybox
+          image: busybox:latest
+          imagePullPolicy: Always
+          command: [ "/bin/bash" , "-c", "--" ]
+          args: [ "while true; do sleep 30; done;" ]
+          volumeMounts:
+            - mountPath: /home/
+              name: sftp-data
+              readOnly: false
+            - mountPath: /etc/ssh
+              name: sftp-config
+              readOnly: false
+            - mountPath: /etc/ssh/sshd_config
+              subPath: sshd_config
+              name: sftp-sshd-config
+              readOnly: false
+
+
