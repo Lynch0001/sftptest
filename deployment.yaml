@@ -29,12 +29,16 @@ spec:
             items:
               - key: sshd_config
                 path: sshd_config
+        - name: sftp-users-config
+          configMap:
+            name: sftp-users-config
+            items:
+              - key: users.conf
+                path: users.conf
       containers:
-
         - name: sftp
           image: atmoz/sftp:latest
           imagePullPolicy: Always
-          args: ["myUser::1010:110:incoming,outgoing"] #create users and dirs
           ports:
             - containerPort: 22
           volumeMounts:
@@ -48,6 +52,10 @@ spec:
               subPath: sshd_config
               name: sftp-sshd-config
               readOnly: false
+            - mountPath: /etc/sftp/users.conf
+              subPath: users.conf
+              name: sftp-users-config
+              readOnly: false
           securityContext:
             capabilities:
               add: ["SYS_ADMIN"]
@@ -55,8 +63,7 @@ spec:
         - name: busybox
           image: busybox:latest
           imagePullPolicy: Always
-          command: [ "/bin/bash" , "-c", "--" ]
-          args: [ "while true; do sleep 30; done;" ]
+          command: [ "sh", "-c", "tail -f /dev/null" ]
           volumeMounts:
             - mountPath: /home/
               name: sftp-data

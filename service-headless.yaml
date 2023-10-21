@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: sftp-headless
+  namespace: sftp
+  labels:
+    environment: production
+spec:
+  clusterIP: None
+  ports:
+    - name: "ssh"
+      port: 22
+  selector:
+    app: sftp

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sftp-users-config
+  namespace: sftp
+data:
+  users.conf: |
+    user1:password:1010:110:incoming,outgoing
+    user2:password:1011:110:incoming,outgoing
+    user3:password:1012:110:incoming,outgoing
