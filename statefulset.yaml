@@ -32,6 +32,11 @@ spec:
         - name: secret-ssh-keys
           secret:
             secretName: secret-ssh-keys
+            defaultMode: 0400
+        - name: secret-server-keys
+          secret:
+            secretName: secret-server-keys
+            defaultMode: 0400
       containers:
         - name: sftp
           image: atmoz/sftp:latest
@@ -53,29 +58,45 @@ spec:
               subPath: users.conf
               name: sftp-users-config
               readOnly: false
-            - mountPath: /home/user1/.ssh/user1-key-rsa
-              subPath: user1-key-rsa
+            - mountPath: /home/user1/.ssh/keys/user1_rsa_key
+              subPath: user1_rsa_key
               name: secret-ssh-keys
               readOnly: true
-            - mountPath: /home/user1/.ssh/user1-key-rsa.pub
-              subPath: user1-key-rsa.pub
+            - mountPath: /home/user1/.ssh/keys/user1_rsa_key.pub
+              subPath: user1_rsa_key.pub
               name: secret-ssh-keys
               readOnly: true
-            - mountPath: /home/user1/.ssh/user2-key-rsa
-              subPath: user2-key-rsa
+            - mountPath: /home/user1/.ssh/keys/user2_rsa_key
+              subPath: user2_rsa_key
               name: secret-ssh-keys
               readOnly: true
-            - mountPath: /home/user2/.ssh/user2-key-rsa.pub
-              subPath: user2-key-rsa.pub
+            - mountPath: /home/user2/.ssh/keys/user2_rsa_key.pub
+              subPath: user2_rsa_key.pub
               name: secret-ssh-keys
               readOnly: true
-            - mountPath: /home/user3/.ssh/user3-key-rsa
-              subPath: user3-key-rsa
+            - mountPath: /home/user3/.ssh/keys/user3_rsa_key
+              subPath: user3_rsa_key
               name: secret-ssh-keys
               readOnly: true
-            - mountPath: /home/user3/.ssh/user3-key-rsa.pub
-              subPath: user3-key-rsa.pub
+            - mountPath: /home/user3/.ssh/keys/user3_rsa_key.pub
+              subPath: user3_rsa_key.pub
               name: secret-ssh-keys
+              readOnly: true
+            - mountPath: /etc/ssh/ssh_host_rsa_key
+              subPath: ssh_host_rsa_key
+              name: secret-server-keys
+              readOnly: true
+            - mountPath: /etc/ssh/ssh_host_rsa_key.pub
+              subPath: ssh_host_rsa_key.pub
+              name: secret-server-keys
+              readOnly: true
+            - mountPath: /etc/ssh/ssh_host_ed25519_key
+              subPath: ssh_host_ed25519_key
+              name: secret-server-keys
+              readOnly: true
+            - mountPath: /etc/ssh/ssh_host_ed25519_key.pub
+              subPath: ssh_host_ed25519_key.pub
+              name: secret-server-keys
               readOnly: true
           securityContext:
             capabilities:
@@ -96,28 +117,28 @@ spec:
               subPath: sshd_config
               name: sftp-sshd-config
               readOnly: false
-            - mountPath: /home/user1/.ssh/user1-key-rsa
-              subPath: user1-key-rsa
+            - mountPath: /home/user1/.ssh/keys/user1_rsa_key
+              subPath: user1_rsa_key
               name: secret-ssh-keys
               readOnly: true
-            - mountPath: /home/user1/.ssh/user1-key-rsa.pub
-              subPath: user1-key-rsa.pub
+            - mountPath: /home/user1/.ssh/keys/user1_rsa_key.pub
+              subPath: user1_rsa_key.pub
               name: secret-ssh-keys
               readOnly: true
-            - mountPath: /home/user2/.ssh/user2-key-rsa
-              subPath: user2-key-rsa
+            - mountPath: /home/user2/.ssh/keys/user2_rsa_key
+              subPath: user2_rsa_key
               name: secret-ssh-keys
               readOnly: true
-            - mountPath: /home/user2/.ssh/user2-key-rsa.pub
-              subPath: user2-key-rsa.pub
+            - mountPath: /home/user2/.ssh/keys/user2_rsa_key.pub
+              subPath: user2_rsa_key.pub
               name: secret-ssh-keys
               readOnly: true
-            - mountPath: /home/user3/.ssh/user3-key-rsa
-              subPath: user3-key-rsa
+            - mountPath: /home/user3/.ssh/keys/user3_rsa_key
+              subPath: user3_rsa_key
               name: secret-ssh-keys
               readOnly: true
-            - mountPath: /home/user3/.ssh/user3-key-rsa.pub
-              subPath: user3-key-rsa.pub
+            - mountPath: /home/user3/.ssh/keys/user3_rsa_key.pub
+              subPath: user3_rsa_key.pub
               name: secret-ssh-keys
               readOnly: true
   volumeClaimTemplates:
