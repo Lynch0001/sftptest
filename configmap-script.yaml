@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sftp-permissions-config
+  namespace: sftp
+data:
+  change_permissions.sh: |
+    #!/bin/bash
+    #File mounted as: /etc/sftp.d/change_permissions.sh
+    chown user1: /home/user1
+    chown user2: /home/user2
+    chown user3: /home/user3

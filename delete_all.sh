@@ -6,6 +6,7 @@ kubectl delete -f secret-ssh-keys.yaml
 kubectl delete -f secret-server-keys.yaml
 kubectl delete -f configmap.yaml
 kubectl delete -f configmap-users.yaml
+kubectl delete -f configmap-script.yaml
 kubectl delete -f statefulset.yaml
 kubectl delete -f service.yaml
 kubectl delete -f service-headless.yaml

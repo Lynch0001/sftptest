@@ -29,6 +29,13 @@ spec:
             items:
               - key: users.conf
                 path: users.conf
+        - name: sftp-permissions-config
+          configMap:
+            name: sftp-permissions-config
+            defaultMode: 0744
+            items:
+              - key: change_permissions.sh
+                path: change_permissions.sh
         - name: secret-ssh-keys
           secret:
             secretName: secret-ssh-keys
@@ -98,6 +105,10 @@ spec:
               subPath: ssh_host_ed25519_key.pub
               name: secret-server-keys
               readOnly: true
+            - mountPath: /etc/sftp.d/change_permissions.sh
+              subPath: change_permissions.sh
+              name: sftp-permissions-config
+              readOnly: false
           securityContext:
             capabilities:
               add: ["SYS_ADMIN"]
