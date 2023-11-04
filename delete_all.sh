@@ -8,6 +8,6 @@ kubectl delete -f configmap.yaml
 kubectl delete -f configmap-users.yaml
 kubectl delete -f configmap-script.yaml
 kubectl delete -f statefulset.yaml
-kubectl delete -f service.yaml
+kubectl delete -f service-deployment.yaml
 kubectl delete -f service-headless.yaml
 kubectl delete -f namespace.yaml

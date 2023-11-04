@@ -29,32 +29,41 @@ spec:
             items:
               - key: sshd_config
                 path: sshd_config
-        - name: sftp-users-config
+        - name: sftp-permissions-config
           configMap:
-            name: sftp-users-config
+            name: sftp-permissions-config
+            defaultMode: 0744
             items:
-              - key: users.conf
-                path: users.conf
+              - key: change_permissions.sh
+                path: change_permissions.sh
+        - name: secret-ssh-keys2
+          secret:
+            secretName: secret-ssh-keys
+            items: #should be permission 644
+              - key: user1_rsa_key.pub
+                path: id_rsa.pub
       containers:
         - name: sftp
           image: atmoz/sftp:latest
           imagePullPolicy: Always
+          args: ["usera:password:1001:100:incoming,outgoing"] #create users and dirs
           ports:
             - containerPort: 22
           volumeMounts:
             - mountPath: /home/
               name: sftp-data
               readOnly: false
-            - mountPath: /etc/ssh
-              name: sftp-config
-              readOnly: false
             - mountPath: /etc/ssh/sshd_config
               subPath: sshd_config
               name: sftp-sshd-config
               readOnly: false
-            - mountPath: /etc/sftp/users.conf
-              subPath: users.conf
-              name: sftp-users-config
+            - mountPath: /etc/sftp.d/change_permissions.sh
+              subPath: change_permissions.sh
+              name: sftp-permissions-config
+              readOnly: false
+            - mountPath: /home/usera/.ssh/keys/id_rsa.pub
+              subPath: id_rsa.pub
+              name: secret-ssh-keys2
               readOnly: false
           securityContext:
             capabilities:
@@ -68,12 +77,6 @@ spec:
             - mountPath: /home/
               name: sftp-data
               readOnly: false
-            - mountPath: /etc/ssh
-              name: sftp-config
-              readOnly: false
-            - mountPath: /etc/ssh/sshd_config
-              subPath: sshd_config
-              name: sftp-sshd-config
-              readOnly: false
+
 
 

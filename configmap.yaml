@@ -15,4 +15,8 @@ data:
     Subsystem sftp internal-sftp
     ForceCommand internal-sftp
     ChrootDirectory %h
-    LogLevel VERBOSE
+    PasswordAuthentication no
+    LogLevel DEBUG3
+    TCPKeepAlive yes
+    ClientAliveInterval 60
+    ClientAliveCountMax 40000

@@ -36,10 +36,19 @@ spec:
             items:
               - key: change_permissions.sh
                 path: change_permissions.sh
-        - name: secret-ssh-keys
+        - name: secret-ssh-keys1
           secret:
             secretName: secret-ssh-keys
-            defaultMode: 0400
+            defaultMode: 384
+            items: #should be permission 600
+              - key: user1_rsa_key
+                path: id_rsa
+        - name: secret-ssh-keys2
+          secret:
+            secretName: secret-ssh-keys
+            items: #should be permission 644
+              - key: user1_rsa_key.pub
+                path: id_rsa.pub
         - name: secret-server-keys
           secret:
             secretName: secret-server-keys
@@ -65,30 +74,14 @@ spec:
               subPath: users.conf
               name: sftp-users-config
               readOnly: false
-            - mountPath: /home/user1/.ssh/keys/user1_rsa_key
-              subPath: user1_rsa_key
-              name: secret-ssh-keys
-              readOnly: true
-            - mountPath: /home/user1/.ssh/keys/user1_rsa_key.pub
-              subPath: user1_rsa_key.pub
-              name: secret-ssh-keys
-              readOnly: true
-            - mountPath: /home/user1/.ssh/keys/user2_rsa_key
-              subPath: user2_rsa_key
-              name: secret-ssh-keys
-              readOnly: true
-            - mountPath: /home/user2/.ssh/keys/user2_rsa_key.pub
-              subPath: user2_rsa_key.pub
-              name: secret-ssh-keys
-              readOnly: true
-            - mountPath: /home/user3/.ssh/keys/user3_rsa_key
-              subPath: user3_rsa_key
-              name: secret-ssh-keys
-              readOnly: true
-            - mountPath: /home/user3/.ssh/keys/user3_rsa_key.pub
-              subPath: user3_rsa_key.pub
-              name: secret-ssh-keys
-              readOnly: true
+            - mountPath: /home/user1/.ssh/keys/id_rsa
+              subPath: id_rsa
+              name: secret-ssh-keys1
+              readOnly: false
+            - mountPath: /home/user1/.ssh/keys/id_rsa.pub
+              subPath: id_rsa.pub
+              name: secret-ssh-keys2
+              readOnly: false
             - mountPath: /etc/ssh/ssh_host_rsa_key
               subPath: ssh_host_rsa_key
               name: secret-server-keys
@@ -124,34 +117,6 @@ spec:
             - mountPath: /etc/ssh
               name: sftp-config
               readOnly: false
-            - mountPath: /etc/ssh/sshd_config
-              subPath: sshd_config
-              name: sftp-sshd-config
-              readOnly: false
-            - mountPath: /home/user1/.ssh/keys/user1_rsa_key
-              subPath: user1_rsa_key
-              name: secret-ssh-keys
-              readOnly: true
-            - mountPath: /home/user1/.ssh/keys/user1_rsa_key.pub
-              subPath: user1_rsa_key.pub
-              name: secret-ssh-keys
-              readOnly: true
-            - mountPath: /home/user2/.ssh/keys/user2_rsa_key
-              subPath: user2_rsa_key
-              name: secret-ssh-keys
-              readOnly: true
-            - mountPath: /home/user2/.ssh/keys/user2_rsa_key.pub
-              subPath: user2_rsa_key.pub
-              name: secret-ssh-keys
-              readOnly: true
-            - mountPath: /home/user3/.ssh/keys/user3_rsa_key
-              subPath: user3_rsa_key
-              name: secret-ssh-keys
-              readOnly: true
-            - mountPath: /home/user3/.ssh/keys/user3_rsa_key.pub
-              subPath: user3_rsa_key.pub
-              name: secret-ssh-keys
-              readOnly: true
   volumeClaimTemplates:
     - metadata:
         name: sftp-data
